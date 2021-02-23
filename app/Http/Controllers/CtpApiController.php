@@ -42,7 +42,7 @@ class CtpApiController extends BaseController
                         "result" => [
                             "uniqueId" => sha1($testResult->uuid),
                             "unique" => sha1($testResult->uuid),
-                            "sampleDate" => date("Y-m-d H:i",strtotime($testResult->sampleDate)),
+                            "sampleDate" => date(DATE_ATOM,strtotime($testResult->sampleDate)),
                             "testType" => $testResult->testTypeId,
                             "negativeResult" => ($testResult->result == 0),
                             "checksum" => ($dayOfYear%65),
