@@ -13,7 +13,7 @@
 |
 */
 
-$router->get('/', ['uses' => 'Controller@index']);
+//$router->get('/', ['uses' => 'Controller@index']);
 
 $router->post('/ctp/get_test_result', ['middleware' =>'cms_sign','uses' => 'CtpApiController@get_test_result']);
 
