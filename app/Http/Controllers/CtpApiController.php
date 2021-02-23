@@ -32,6 +32,9 @@ class CtpApiController extends BaseController
                     $testResult->fetchedCount = $testResult->fetchedCount + 1;
                     $testResult->save();
 
+
+                    $dayOfYear = date('z',strtotime($testResult->birthDate))+1;
+
                     $data = [
                         "protocolVersion" => "1.0",
                         "providerIdentifier"=> config('app.ctp_prefix'),
@@ -42,7 +45,7 @@ class CtpApiController extends BaseController
                             "sampleDate" => date("Y-m-d H:i",strtotime($testResult->sampleDate)),
                             "testType" => $testResult->testTypeId,
                             "negativeResult" => ($testResult->result == 0),
-                            "checksum" => 54,
+                            "checksum" => ($dayOfYear%65),
                         ]
                     ];
                     return response()->json($data, 200);
