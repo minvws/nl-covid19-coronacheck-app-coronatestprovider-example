@@ -16,7 +16,7 @@
                 <tbody>
                 @foreach ($testResults as $testResult)
                     <tr>
-                        <th>{{ $prefix }}-{{ $testResult->token }}-Y2</th>
+                        <th>{{ $prefix }}-{{ $testResult->token }}-{{ $tokenService->generateChecksum($testResult->token)  }}2</th>
                         <td>{{ $testResult->verificationCode }}</td>
                         <td>{{ $testResult->testTypeId }}</td>
                         <td>{{ $testResult->sampleDate }}</td>

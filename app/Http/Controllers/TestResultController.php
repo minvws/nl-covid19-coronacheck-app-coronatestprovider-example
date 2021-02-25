@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TokenGeneratorService;
+use App\Services\TokenService;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Models\TestResult;
@@ -12,11 +12,13 @@ class TestResultController extends BaseController
     /**
      * @return Application|Factory|View
      */
-    public function view()
+    public function view(TokenService $ts)
     {
         $testResults = TestResult::where('sampleDate','>',date("Y-m-d",time()-(config('app.ctp_test_max_age'))))->get();
+
         return view('testresult/view')
             ->with('testResults',$testResults)
+            ->with('tokenService',$ts)
             ->with('prefix',config('app.ctp_prefix'));
     }
 
@@ -38,7 +40,7 @@ class TestResultController extends BaseController
     /**
      * @return Application|Factory|View
      */
-    public function displayCreated(Request $request, TestResult $tr, TokenGeneratorService $tgs)
+    public function displayCreated(Request $request, TestResult $tr, TokenService $ts)
     {
         if($request->input('tokenCount')) {
             $token = $request->input('token');
@@ -54,7 +56,7 @@ class TestResultController extends BaseController
 
             if($tokenCount > 1) {
                 for($i = 1; $i <= $tokenCount; $i++) {
-                    $token = $tgs->getRandomToken();
+                    $token = $ts->getRandomToken();
                     $newTestResults[] = TestResult::create([
                         'token' => $token,
                         'testTypeId' => $testType,
@@ -68,7 +70,7 @@ class TestResultController extends BaseController
             }
             else {
                 if(empty($token))
-                    $token = $tgs->getRandomToken();
+                    $token = $ts->getRandomToken();
                 $newTestResults[] = TestResult::create([
                     'token' => $token,
                     'testTypeId' => $testType,
