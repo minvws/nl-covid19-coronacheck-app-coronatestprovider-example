@@ -34,7 +34,7 @@ class TokenService
             $factor = ($factor == 2) ? 1 : 2;
 
             // Sum the digits of the "addend" as expressed in base "n"
-            $addend = ($addend / $numberOfValidInputCharacters) + ($addend % $numberOfValidInputCharacters);
+            $addend = (floor($addend / $numberOfValidInputCharacters)) + ($addend % $numberOfValidInputCharacters);
             $sum += $addend;
         }
 
