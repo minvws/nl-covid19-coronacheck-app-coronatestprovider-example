@@ -30,7 +30,5 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Directory Permissions
         run: chmod -R 777 storage
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.2.0
       - name: Static analysis with PHPStan
         run: vendor/bin/phpstan analyse app
