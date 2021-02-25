@@ -19,7 +19,8 @@ class TokenService
         return $randomString;
     }
 
-    public function generateChecksum($token) {
+    public function generateChecksum($token) : String
+    {
 
         $factor = 2;
         $sum = 0;
