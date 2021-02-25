@@ -71,6 +71,9 @@ class TestResultController extends BaseController
             else {
                 if(empty($token))
                     $token = $ts->getRandomToken();
+                else
+                    $token = strtoupper($token);
+
                 $newTestResults[] = TestResult::create([
                     'token' => $token,
                     'testTypeId' => $testType,
@@ -85,6 +88,7 @@ class TestResultController extends BaseController
 
         return view('testresult/view')
             ->with('testResults',$newTestResults)
+            ->with('tokenService',$ts)
             ->with('prefix',config('app.ctp_prefix'));
     }
 }
