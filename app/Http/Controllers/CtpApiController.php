@@ -85,7 +85,7 @@ class CtpApiController extends BaseController
                         "holder" => [
                             "firstNameInitial" => strtoupper(substr($testResult->firstName,0,1)),
                             "lastNameInitial" => strtoupper(substr($testResult->lastName,0,1)),
-                            "birthDayOfMonth" => date('d',strtotime($testResult->birthDate)),
+                            "birthDayOfMonth" => intval(date('d',strtotime($testResult->birthDate))),
                         ]
                     ]
                 ];
