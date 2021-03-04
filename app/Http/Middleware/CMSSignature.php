@@ -18,6 +18,10 @@ class CMSSignature
     {
         $response = $next($request);
 
+        // Only sign JSONResponses
+        if(!is_a($response,'Illuminate\Http\JsonResponse'))
+            return $response;
+
         $data = trim($response->getContent());
         $signature = $this->cmsSignatureService->signData($data);
 
