@@ -132,4 +132,15 @@ return [
     */
     'ctp_prefix' => env('CTP_PREFIX','ZZZ'),
     'ctp_test_max_age' => env('CTP_TEST_MAX_AGE','172800'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | SMS Service Provider
+    |--------------------------------------------------------------------------
+    |
+    | These are used to send SMS messages
+    |
+    */
+    'gateway_api_token' => env('GATEWAY_API_TOKEN',''),
+    'sms_enabled' => env('SMS_ENABLED',false),
 ];

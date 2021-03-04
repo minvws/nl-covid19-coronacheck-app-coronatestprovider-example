@@ -10,7 +10,7 @@ use App\Models\TestResult;
 class TestResultController extends BaseController
 {
     /**
-     * @return Application|Factory|View
+     * @return \Illuminate\View\View|\Laravel\Lumen\Application
      */
     public function view(TokenService $ts)
     {
@@ -23,7 +23,7 @@ class TestResultController extends BaseController
     }
 
     /**
-     * @return Application|Factory|View
+     * @return \Illuminate\View\View|\Laravel\Lumen\Application
      */
     public function createForm()
     {
@@ -34,21 +34,27 @@ class TestResultController extends BaseController
         return view('testresult/createForm')
             ->with('testTypes',$testTypes)
             ->with('defaultBirthDate',$defaultBirthDate)
-            ->with('defaultSampleDate',$defaultSampleDate);
+            ->with('defaultSampleDate',$defaultSampleDate)
+            ->with('defaultFirstName',"Bob")
+            ->with('defaultLastName',"Bouwer");
     }
 
     /**
-     * @return Application|Factory|View
+     * @return \Illuminate\View\View|\Laravel\Lumen\Application
      */
     public function displayCreated(Request $request, TestResult $tr, TokenService $ts)
     {
         if($request->input('tokenCount')) {
+            $protocolVersion = $request->input('protocolVersion');
             $token = $request->input('token');
             $testType = $request->input('testType');
             $tokenCount = $request->input('tokenCount');
             $testResult = $request->input('testResult');
             $verificationCode = $request->input('verificationCode');
+            $phoneNumber = $request->input('phoneNumber');
             $birthdate = $request->input('birthDate');
+            $firstName = $request->input('firstName');
+            $lastName = $request->input('lastName');
             $sampleDate = $request->input('sampleDate');
             $testResultStatus = $request->input('testResultStatus');
 
@@ -58,12 +64,16 @@ class TestResultController extends BaseController
                 for($i = 1; $i <= $tokenCount; $i++) {
                     $token = $ts->getRandomToken();
                     $newTestResults[] = TestResult::create([
+                        'protocolVersion' => $protocolVersion,
                         'token' => $token,
                         'testTypeId' => $testType,
                         'result' => $testResult,
                         'birthDate' => $birthdate,
+                        'firstName' => $firstName,
+                        'lastName' => $lastName,
                         'sampleDate' => $sampleDate,
                         'verificationCode' => $verificationCode,
+                        'phoneNumber' => $phoneNumber,
                         'status' => $testResultStatus,
                     ]);
                 }
@@ -75,12 +85,16 @@ class TestResultController extends BaseController
                     $token = strtoupper($token);
 
                 $newTestResults[] = TestResult::create([
+                    'protocolVersion' => $protocolVersion,
                     'token' => $token,
                     'testTypeId' => $testType,
                     'result' => $testResult,
                     'birthDate' => $birthdate,
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
                     'sampleDate' => $sampleDate,
                     'verificationCode' => $verificationCode,
+                    'phoneNumber' => $phoneNumber,
                     'status' => $testResultStatus,
                 ]);
             }

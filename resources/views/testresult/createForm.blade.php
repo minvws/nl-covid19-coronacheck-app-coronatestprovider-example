@@ -4,11 +4,21 @@
     <div class="card-body">
         <form method="POST">
             <div class="mb-3 row">
+                <label for="testResult" class="col-sm-2 col-form-label">Protocol Version</label>
+                <div class="col-sm-10">
+                    <select class="form-select" aria-label="protocolVersion" name="protocolVersion">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                    </select>
+                    <div id="protocolVersion" class="form-text">This will change the get_test_result api protocol for this test result.</div>
+                </div>
+            </div>
+            <div class="mb-3 row">
                 <label for="testType" class="col-sm-2 col-form-label">Test Type</label>
                 <div class="col-sm-10">
                     <select class="form-select" aria-label="Test Type" name="testType">
                         @foreach ($testTypes as $testType)
-                            <option value="{{ $testType->uuid }}">{{ $testType->name  }}</option>
+                            <option value="{{ $testType->uuid }}">{{ $testType->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -36,10 +46,17 @@
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="verificationCode" class="col-sm-2 col-form-label">Verification Code</label>
+                <label for="verificationCode" class="col-sm-2 col-form-label">Preset Verification Code</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="verificationCode" name="verificationCode" aria-describedby="verificationCodeInfo">
-                    <div id="verificationCodeInfo" class="form-text">Optional.</div>
+                    <div id="verificationCodeInfo" class="form-text">Optional. If none is provided, none is required by the app.</div>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="lastName" class="col-sm-2 col-form-label">Phone Number</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="" aria-describedby="phoneNumberInfo">
+                    <div id="phoneNumberInfo" class="form-text">Optional. Verification Code will be generated and sent by SMS. Format: 0612345678.</div>
                 </div>
             </div>
             <div class="mb-3 row">
@@ -55,6 +72,18 @@
                 <label for="birthdate" class="col-sm-2 col-form-label">Birthdate</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="birthDate" name="birthDate" aria-describedby="birthdateInfo" value="{{ $defaultBirthDate }}">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="firstName" name="firstName" value="{{ $defaultFirstName }}">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="lastName" name="lastName" value="{{ $defaultLastName }}">
                 </div>
             </div>
             <div class="mb-3 row">

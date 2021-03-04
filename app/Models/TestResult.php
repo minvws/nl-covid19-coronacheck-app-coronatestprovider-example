@@ -49,6 +49,7 @@ class TestResult extends Model
      * @var string[]
      */
     protected $fillable = [
+        'protocolVersion',
         'token',
         'status',
         'sampleDate',
@@ -56,6 +57,10 @@ class TestResult extends Model
         'result',
         'birthDate',
         'verificationCode',
+        'phoneNumber',
+        'firstName',
+        'lastName',
+        'birthDayOfMonth',
         'fetchedCount'
     ];
 

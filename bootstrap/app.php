@@ -88,6 +88,7 @@ $app->routeMiddleware([
 */
 
 $app->register(App\Providers\CMSSignatureServiceProvider::class);
+$app->register(App\Providers\SMSServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
