@@ -25,16 +25,19 @@ Create database and load data
 CREATE DATABASE CoronaTestProvider;
 CREATE TABLE `TestResults` (
    `uuid` varchar(36) COLLATE utf8_bin DEFAULT NULL,
+   `protocolVersion` int(11) UNSIGNED NOT NULL,
    `testTypeId` varchar(12) COLLATE utf8_bin NOT NULL,
    `verificationCode` varchar(255) COLLATE utf8_bin DEFAULT NULL,
    `sampleDate` datetime DEFAULT NULL,
    `result` int(11) NOT NULL,
    `birthDate` date NOT NULL,
+   `phoneNumber` varchar(10) COLLATE utf8_bin NOT NULL,
+   `firstName` varchar(255) COLLATE utf8_bin NOT NULL,
+   `lastName` varchar(255) COLLATE utf8_bin NOT NULL,
    `token` varchar(255) COLLATE utf8_bin NOT NULL,
    `fetchedCount` int(11) NOT NULL DEFAULT 0,
-   `status` varchar(255) COLLATE utf8_bin NOT NULL,
-   UNIQUE KEY `token` (`token`),
-   UNIQUE KEY `uuid` (`uuid`)
+   `smsCounter` int(11) UNSIGNED NOT NULL DEFAULT 0,
+   `status` varchar(255) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `TestType` (
