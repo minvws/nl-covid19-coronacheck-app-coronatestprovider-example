@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SMSService;
 use App\Services\TokenService;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
@@ -44,9 +45,9 @@ class TestResultController extends BaseController
      */
     public function displayCreated(Request $request, TestResult $tr, TokenService $ts)
     {
+        $newTestResults = array();
+
         if($request->input('tokenCount')) {
-            $protocolVersion = $request->input('protocolVersion');
-            $token = $request->input('token');
             $testType = $request->input('testType');
             $tokenCount = $request->input('tokenCount');
             $testResult = $request->input('testResult');
@@ -57,35 +58,12 @@ class TestResultController extends BaseController
             $lastName = $request->input('lastName');
             $sampleDate = $request->input('sampleDate');
             $testResultStatus = $request->input('testResultStatus');
+            $tokenDistributionSMS = $request->input('tokenDistributionSMS');
 
-            $newTestResults = array();
-
-            if($tokenCount > 1) {
-                for($i = 1; $i <= $tokenCount; $i++) {
-                    $token = $ts->getRandomToken();
-                    $newTestResults[] = TestResult::create([
-                        'protocolVersion' => $protocolVersion,
-                        'token' => $token,
-                        'testTypeId' => $testType,
-                        'result' => $testResult,
-                        'birthDate' => $birthdate,
-                        'firstName' => $firstName,
-                        'lastName' => $lastName,
-                        'sampleDate' => $sampleDate,
-                        'verificationCode' => $verificationCode,
-                        'phoneNumber' => $phoneNumber,
-                        'status' => $testResultStatus,
-                    ]);
-                }
-            }
-            else {
-                if(empty($token))
-                    $token = $ts->getRandomToken();
-                else
-                    $token = strtoupper($token);
+            for($i = 0; $i < $tokenCount; $i++) {
+                $token = $ts->getRandomToken();
 
                 $newTestResults[] = TestResult::create([
-                    'protocolVersion' => $protocolVersion,
                     'token' => $token,
                     'testTypeId' => $testType,
                     'result' => $testResult,
@@ -97,6 +75,20 @@ class TestResultController extends BaseController
                     'phoneNumber' => $phoneNumber,
                     'status' => $testResultStatus,
                 ]);
+
+                if($tokenDistributionSMS !== null) {
+                    // Complete token
+                    $tokenService = app(TokenService::class);
+
+                    $code = config('app.ctp_prefix').'-'.$token.'-'.$tokenService->generateChecksum($token).'2';
+
+                    // Send SMS
+                    $smsService = app(SMSService::class);
+                    $smsService->sendSMS(
+                        $phoneNumber,
+                        "Your CoronaCheck Token is: ".$code
+                    );
+                }
             }
         }
 
