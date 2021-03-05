@@ -25,7 +25,6 @@ Create database and load data
 CREATE DATABASE CoronaTestProvider;
 CREATE TABLE `TestResults` (
    `uuid` varchar(36) COLLATE utf8_bin DEFAULT NULL,
-   `protocolVersion` int(11) UNSIGNED NOT NULL,
    `testTypeId` varchar(12) COLLATE utf8_bin NOT NULL,
    `verificationCode` varchar(255) COLLATE utf8_bin DEFAULT NULL,
    `sampleDate` datetime DEFAULT NULL,
