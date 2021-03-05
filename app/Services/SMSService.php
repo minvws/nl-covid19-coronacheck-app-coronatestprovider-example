@@ -20,6 +20,14 @@ class SMSService
 
     public function sendSMS($phoneNumber, $message) : bool
     {
+        if(strlen($phoneNumber) != 10) {
+            throw new Exception("Phone number length is not correct");
+        }
+
+        if(substr($phoneNumber,0,2) != "06") {
+            throw new Exception("This is not a mobile phone number");
+        }
+
         $client = new Client();
 
         $response = $client->post(
