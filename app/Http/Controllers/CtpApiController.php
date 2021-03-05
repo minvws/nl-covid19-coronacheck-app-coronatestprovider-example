@@ -22,7 +22,14 @@ class CtpApiController extends BaseController
             return response()->json($data, 202);
         }
         else if($testResult->status == "complete") {
-            if($testResult->verificationCode == $verificationCode) {
+            if(
+                // Allow (empty) verification code match when no phone number is specified
+                (empty($testResult->phoneNumber) && $testResult->verificationCode == $verificationCode)
+                ||
+                // Do not allow empty verification code when phone number is specified
+                (!empty($testResult->phoneNumber) && !empty($testResult->verificationCode) &&
+                    $testResult->verificationCode == $verificationCode)
+            ) {
                 $testResult->fetchedCount = $testResult->fetchedCount + 1;
                 $testResult->save();
 
@@ -45,6 +52,24 @@ class CtpApiController extends BaseController
                 return response()->json($data, 200);
             }
             else {
+                // Check for Phone number to send SMS
+                if(!empty($testResult->phoneNumber)
+                    && strlen($testResult->phoneNumber) == 10
+                    && $testResult->smsCounter < 4
+                    && config('app.sms_enabled')
+                ) {
+
+                    // Generate and save Verification Code
+                    $newVerificationCode = str_pad(rand(0,9999),4,"0",STR_PAD_LEFT);
+                    $testResult->verificationCode = $newVerificationCode;
+                    $testResult->smsCounter = $testResult->smsCounter + 1;
+                    $testResult->save();
+
+                    // Send SMS
+                    $smsService = app(SMSService::class);
+                    $smsService->sendSMS($testResult->phoneNumber,"Your CoronaCheck Verification Code is: ".$newVerificationCode);
+                }
+
                 $data = [
                     "protocolVersion" => "1.0",
                     "providerIdentifier"=> config('app.ctp_prefix'),
