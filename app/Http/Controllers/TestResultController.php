@@ -53,12 +53,16 @@ class TestResultController extends BaseController
             $testResult = $request->input('testResult');
             $verificationCode = $request->input('verificationCode');
             $phoneNumber = $request->input('phoneNumber');
-            $birthdate = $request->input('birthDate');
+            $birthDate = $request->input('birthDate');
             $firstName = $request->input('firstName');
             $lastName = $request->input('lastName');
             $sampleDate = $request->input('sampleDate');
             $testResultStatus = $request->input('testResultStatus');
             $tokenDistributionSMS = $request->input('tokenDistributionSMS');
+
+            // Convert birthDate from CET to UTC
+            $date = new \DateTime($sampleDate, new \DateTimeZone('Europe/Amsterdam'));
+            $sampleDateUTC = gmdate("Y-m-d H:i",$date->format('U'));
 
             for($i = 0; $i < $tokenCount; $i++) {
                 $token = $ts->getRandomToken();
@@ -67,10 +71,10 @@ class TestResultController extends BaseController
                     'token' => $token,
                     'testTypeId' => $testType,
                     'result' => $testResult,
-                    'birthDate' => $birthdate,
+                    'birthDate' => $birthDate,
                     'firstName' => $firstName,
                     'lastName' => $lastName,
-                    'sampleDate' => $sampleDate,
+                    'sampleDate' => $sampleDateUTC,
                     'verificationCode' => $verificationCode,
                     'phoneNumber' => $phoneNumber,
                     'status' => $testResultStatus,

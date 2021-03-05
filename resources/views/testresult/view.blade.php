@@ -8,7 +8,7 @@
                     <th scope="col">Token</th>
                     <th scope="col">Verification Code</th>
                     <th scope="col">Test Type</th>
-                    <th scope="col">Sample Date</th>
+                    <th scope="col">Sample Date (CET)</th>
                     <th scope="col">Birth Date</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
@@ -22,7 +22,14 @@
                         <th>{{ $prefix }}-{{ $testResult->token }}-{{ $tokenService->generateChecksum($testResult->token)  }}2</th>
                         <td>{{ $testResult->verificationCode ?: "None" }}</td>
                         <td>{{ $testResult->testTypeId }}</td>
-                        <td>{{ $testResult->sampleDate }}</td>
+                        <td>
+                            @php
+                                // Convert birthDate from CET to UTC
+                                $date = new \DateTime($testResult->sampleDate, new \DateTimeZone('Etc/UTC'));
+                                $date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
+                                echo $date->format('Y-m-d H:i');
+                            @endphp
+                        </td>
                         <td>{{ $testResult->birthDate }}</td>
                         <td>{{ $testResult->firstName }}</td>
                         <td>{{ $testResult->lastName }}</td>
