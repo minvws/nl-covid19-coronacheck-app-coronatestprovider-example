@@ -67,7 +67,14 @@ class CtpApiController extends BaseController
             return response()->json($data, 202);
         }
         else if($testResult->status == "complete") {
-            if($testResult->verificationCode == $verificationCode) {
+            if(
+                // Allow (empty) verification code match when no phone number is specified
+                (empty($testResult->phoneNumber) && $testResult->verificationCode == $verificationCode)
+                ||
+                // Do not allow empty verification code when phone number is specified
+                (!empty($testResult->phoneNumber) && !empty($testResult->verificationCode) &&
+                    $testResult->verificationCode == $verificationCode)
+            ) {
 
                 $testResult->fetchedCount = $testResult->fetchedCount + 1;
                 $testResult->save();
