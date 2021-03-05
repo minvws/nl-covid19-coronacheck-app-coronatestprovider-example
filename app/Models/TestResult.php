@@ -49,7 +49,6 @@ class TestResult extends Model
      * @var string[]
      */
     protected $fillable = [
-        'protocolVersion',
         'token',
         'status',
         'sampleDate',

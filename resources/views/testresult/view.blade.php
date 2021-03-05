@@ -5,7 +5,6 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">P-Version</th>
                     <th scope="col">Token</th>
                     <th scope="col">Verification Code</th>
                     <th scope="col">Test Type</th>
@@ -14,13 +13,12 @@
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
                     <th scope="col">Phone Number</th>
-                    <th scope="col">Fetched Counter</th>
+                    <th scope="col">Counters</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($testResults as $testResult)
                     <tr>
-                        <td>{{ $testResult->protocolVersion }}</td>
                         <th>{{ $prefix }}-{{ $testResult->token }}-{{ $tokenService->generateChecksum($testResult->token)  }}2</th>
                         <td>{{ $testResult->verificationCode ?: "None" }}</td>
                         <td>{{ $testResult->testTypeId }}</td>
@@ -29,7 +27,17 @@
                         <td>{{ $testResult->firstName }}</td>
                         <td>{{ $testResult->lastName }}</td>
                         <td>{{ $testResult->phoneNumber }}</td>
-                        <td>{{ $testResult->fetchedCount }}</td>
+                        <td>
+                            <span class="badge {{ $testResult->fetchedCount <= 3 ? "bg-success" : "bg-danger" }}">
+                                Fetched <span class="badge bg-light text-dark">{{ $testResult->fetchedCount }}</span>
+                                <span class="visually-hidden">Fetched</span>
+                            </span>
+                            <span class="badge {{ $testResult->smsCounter <= 3 ? "bg-success" : "bg-danger" }}">
+                                SMS Limit <span class="badge bg-light text-dark">{{ $testResult->smsCounter }}</span>
+                                <span class="visually-hidden">SMS Limit</span>
+                            </span>
+
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
